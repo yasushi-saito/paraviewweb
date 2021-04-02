@@ -22,12 +22,14 @@ export default class NativeImageRenderer {
     domElement,
     imageProvider,
     mouseListeners = null,
-    drawFPS = true
+    drawFPS = true,
+    canvas = null,
+    onImageDraw = null,
   ) {
     this.size = domElement
       ? SizeHelper.getSize(domElement)
       : { clientWidth: 400, clientHeight: 400 };
-    this.canvas = document.createElement('canvas');
+    this.canvas = canvas ? canvas : document.createElement('canvas');
     this.image = new Image();
     this.fps = '';
     this.drawFPS = drawFPS;
@@ -35,6 +37,8 @@ export default class NativeImageRenderer {
     this.imageProvider = imageProvider;
     this.fpsBuffer = [];
     this.fpsBufferSize = 30;
+
+    this.onImageDraw = onImageDraw;
 
     this.image.onload = () => {
       this.updateDrawnImage();
@@ -63,6 +67,7 @@ export default class NativeImageRenderer {
         while (this.fpsBufferSize < this.fpsBuffer.length) {
           this.fpsBuffer.shift();
         }
+        this.cameraInfo = data.metadata.cameraInfo;
       })
     );
 
@@ -166,6 +171,9 @@ export default class NativeImageRenderer {
         this.size.clientWidth - 5,
         5
       );
+    }
+    if (this.onImageDraw) {
+      this.onImageDraw(this);
     }
   }
 }

@@ -41,7 +41,7 @@ export default class VtkRenderer extends React.Component {
     if (prevProps.client !== this.props.client) {
       this.mouseListener = new VtkWebMouseListener(this.props.client);
 
-      // Attach interaction listener for image qualitya
+      // Attach interaction listener for image quality
       this.mouseListener.onInteraction((interact) => {
         if (this.props.onInteraction) {
           this.props.onInteraction(interact);
@@ -93,7 +93,9 @@ export default class VtkRenderer extends React.Component {
         container,
         this.binaryImageStream,
         this.mouseListener.getListeners(),
-        this.props.showFPS
+        this.props.showFPS,
+        this.props.canvas,
+        this.props.onImageDraw
       );
 
       // Establish image stream connection
@@ -199,6 +201,14 @@ VtkRenderer.propTypes = {
   // Takes a single boolean arg. The arg is true for a mouse down, false for a
   // mouse up event.
   onInteraction: PropTypes.func,
+
+  // Optional callback that runs when the image renderer draws an image.
+  // Takes a single arg, which is the renderer (NativeImageRenderer).
+  onImageDraw: PropTypes.func,
+
+  // The HTMLCanvasElement for the image renderer to use.
+  // If not specified, the renderer will create and use its own canvas.
+  canvas: PropTypes.object,
 };
 
 VtkRenderer.defaultProps = {
