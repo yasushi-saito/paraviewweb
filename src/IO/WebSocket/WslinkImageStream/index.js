@@ -58,14 +58,14 @@ function wslinkImageStream(publicAPI, model) {
   publicAPI.unsubscribeRenderTopic = () => {
     if (model.renderTopicSubscription) {
       model.client.VtkImageDelivery.offRenderChange(
-          model.renderTopicSubscription
+        model.renderTopicSubscription
       ).then(
-          (unsubSuccess) => {
-              console.log('Unsubscribe resolved ', unsubSuccess);
-          },
-          (unsubFailure) => {
-              console.log('Unsubscribe error ', unsubFailure);
-          }
+        (unsubSuccess) => {
+          console.log('Unsubscribe resolved ', unsubSuccess);
+        },
+        (unsubFailure) => {
+          console.log('Unsubscribe error ', unsubFailure);
+        }
       );
     }
   };
@@ -141,6 +141,7 @@ function wslinkImageStream(publicAPI, model) {
         id: msg.id,
         memory: msg.memsize,
         workTime: msg.workTime,
+        cameraInfo: msg.camera,
       },
     };
 
