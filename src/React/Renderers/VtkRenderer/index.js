@@ -55,7 +55,11 @@ export default class VtkRenderer extends React.Component {
         } else {
           this.binaryImageStream
             .stopInteractiveQuality()
-            .then(this.binaryImageStream.invalidateCache);
+            .then(() => {
+              if (this.binaryImageStream) {
+                this.binaryImageStream.invalidateCache);
+              }
+            });
           setTimeout(
             this.binaryImageStream.invalidateCache,
             this.props.interactionTimout
@@ -104,9 +108,12 @@ export default class VtkRenderer extends React.Component {
           view_id: parseInt(this.props.viewId, 10),
         })
         .then(() => {
-          // Update size and do a force push
-          sizeHelper.triggerChange();
-          this.binaryImageStream.invalidateCache();
+          // If we unmounted while connecting, do nothing.
+          if (this.binaryImageStream) {
+            // Update size and do a force push
+            sizeHelper.triggerChange();
+            this.binaryImageStream.invalidateCache();
+          }
         });
     }
     const viewIdAsNumber = Number(this.props.viewId);
